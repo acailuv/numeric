@@ -8,11 +8,10 @@ func (n *Numeric) UnmarshalJSON(bytes []byte) error {
 		return nil
 	}
 
-	// If the amount is quoted, strip the quotes
-	if len(bytes) > 2 && bytes[0] == '"' && bytes[len(bytes)-1] == '"' {
-		bytes = bytes[1 : len(bytes)-1]
+	str, err := unquote(bytes)
+	if err != nil {
+		return err
 	}
-	str := string(bytes)
 
 	num, err := NewWithError(str)
 	if err != nil {

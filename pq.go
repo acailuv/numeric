@@ -4,12 +4,21 @@ import "database/sql/driver"
 
 // Scan implements the sql.Scanner interface for database deserialization.
 func (n *Numeric) Scan(value any) error {
-	num, err := NewWithError(value)
-	if err != nil {
-		return err
-	}
+	switch v := value.(type) {
+	case float32, float64, int64, uint64:
+		*n = New(v)
+	default:
+		// default is trying to interpret value stored as string
+		str, err := unquote(v)
+		if err != nil {
+			return err
+		}
 
-	*n = num
+		*n, err = NewWithError(str)
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
