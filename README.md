@@ -1,6 +1,6 @@
 # numeric
 
-Ultra-accurate and reliable big number library for Go.
+Ultra-accurate and reliable big number library for Go. Powered with C GNU MPFR library.
 
 # Requirements
 

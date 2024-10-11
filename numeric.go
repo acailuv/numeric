@@ -101,7 +101,7 @@ func NewWithError(x any) (Numeric, error) {
 }
 
 // Sets the default precision bits when doing arithmetic operations.
-// The upper limit is unlimited. However, more precision bits will make your app use more RAM.
+// The upper limit is "virtually" unlimited. However, more precision bits will make your app use more RAM.
 // Cranking this number up to a large number will also make arithmetic operations slower. So bear this in mind.
 // Default value is 53.
 func SetPrecisionBits(bits uint64) {
@@ -110,7 +110,7 @@ func SetPrecisionBits(bits uint64) {
 }
 
 // Sets the decimal places shown when .String() is called.
-// The upper limit is unlimited. However, more decimal places will makes your number inaccurate.
+// The upper limit is "virtually" unlimited. However, more decimal places will make your number inaccurate.
 // Example: 1.23 will be represented as 1.22999999... if you set a high decimal places, with not enough precision bits.
 // You can overcome this by setting a higher precision bits, but bear in mind the consequences.
 // Default value is 10.
