@@ -10,6 +10,10 @@ import "C"
 
 // Add a number and return the result. This will not modify the original number.
 func (n Numeric) Add(x any) Numeric {
+	if !n.init {
+		n = New(0)
+	}
+
 	result := New(0)
 
 	switch x := x.(type) {
@@ -30,6 +34,10 @@ func (n Numeric) Add(x any) Numeric {
 
 // Subtract a number and return the result. This will not modify the original number.
 func (n Numeric) Subtract(x any) Numeric {
+	if !n.init {
+		n = New(0)
+	}
+
 	result := New(0)
 
 	switch x := x.(type) {
@@ -50,6 +58,10 @@ func (n Numeric) Subtract(x any) Numeric {
 
 // Multiply a number and return the result. This will not modify the original number.
 func (n Numeric) Multiply(x any) Numeric {
+	if !n.init {
+		n = New(0)
+	}
+
 	result := New(0)
 
 	switch x := x.(type) {
@@ -70,6 +82,10 @@ func (n Numeric) Multiply(x any) Numeric {
 
 // Divide a number and return the result. This will not modify the original number.
 func (n Numeric) Divide(x any) Numeric {
+	if !n.init {
+		n = New(0)
+	}
+
 	result := New(0)
 
 	switch x := x.(type) {
@@ -78,10 +94,19 @@ func (n Numeric) Divide(x any) Numeric {
 			return n
 		}
 
+		if x.Equal(0) {
+			panic("numeric: Division by zero")
+		}
+
 		C.mpfr_div(&result.val[0], &n.val[0], &x.val[0], C.MPFR_RNDN)
 
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
 		_x := New(x)
+
+		if _x.Equal(0) {
+			panic("numeric: Division by zero")
+		}
+
 		C.mpfr_div(&result.val[0], &n.val[0], &_x.val[0], C.MPFR_RNDN)
 	}
 
@@ -90,6 +115,10 @@ func (n Numeric) Divide(x any) Numeric {
 
 // Exponent the current number to the power of `x` and return the result. This will not modify the original number.
 func (n Numeric) Pow(power any) Numeric {
+	if !n.init {
+		n = New(0)
+	}
+
 	result := New(0)
 
 	switch x := power.(type) {
@@ -98,10 +127,19 @@ func (n Numeric) Pow(power any) Numeric {
 			return n
 		}
 
+		if x.LessThan(0) {
+			panic("numeric: Exponent has to be greater than or equal to zero")
+		}
+
 		C.mpfr_pow_ui(&result.val[0], &n.val[0], C.ulong(x.Uint()), C.MPFR_RNDN)
 
 	case int, int8, int16, int32, int64, uint, uint8, uint16, uint32, uint64, float32, float64:
 		_x := New(x)
+
+		if _x.LessThan(0) {
+			panic("numeric: Exponent has to be greater than or equal to zero")
+		}
+
 		C.mpfr_pow_ui(&result.val[0], &n.val[0], C.ulong(_x.Uint()), C.MPFR_RNDN)
 	}
 
@@ -110,12 +148,20 @@ func (n Numeric) Pow(power any) Numeric {
 
 // Makes the number negative. This will modify the original number.
 func (n Numeric) Neg() Numeric {
+	if !n.init {
+		n = New(0)
+	}
+
 	C.mpfr_neg(&n.val[0], &n.val[0], C.MPFR_RNDN)
 	return n
 }
 
 // Makes the number positive. This will modify the original number.
 func (n Numeric) Abs() Numeric {
+	if !n.init {
+		n = New(0)
+	}
+
 	C.mpfr_abs(&n.val[0], &n.val[0], C.MPFR_RNDN)
 	return n
 }

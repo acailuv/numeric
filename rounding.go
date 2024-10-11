@@ -11,7 +11,7 @@ import "C"
 // Ceil the number to the specified decimal places.
 func (n Numeric) Ceil(dp int) Numeric {
 	if !n.init {
-		panic("numeric: Numeric is not initialized")
+		n = New(0)
 	}
 
 	scale := New(10).Pow(dp)
@@ -25,7 +25,7 @@ func (n Numeric) Ceil(dp int) Numeric {
 // Floor the number to the specified decimal places.
 func (n Numeric) Floor(dp int) Numeric {
 	if !n.init {
-		panic("numeric: Numeric is not initialized")
+		n = New(0)
 	}
 
 	scale := New(10).Pow(dp)
@@ -39,7 +39,7 @@ func (n Numeric) Floor(dp int) Numeric {
 // Truncate the number to the specified decimal places.
 func (n Numeric) Truncate(dp int) Numeric {
 	if !n.init {
-		panic("numeric: Numeric is not initialized")
+		n = New(0)
 	}
 
 	scale := New(10).Pow(dp)

@@ -35,7 +35,7 @@ import "C"
 // You can modify the default number of decimal places by using SetStringDecimalPlaces function.
 func (n Numeric) String() string {
 	if !n.init {
-		panic("numeric: Numeric is not initialized")
+		n = New(0)
 	}
 
 	out := C._str(&n.val[0], C.ulong(StringDecimalPlaces))
@@ -46,7 +46,7 @@ func (n Numeric) String() string {
 // Returns numeric as a string with a specified number of decimal places.
 func (n Numeric) StringDecimalPlaces(dp uint64) string {
 	if !n.init {
-		panic("numeric: Numeric is not initialized")
+		n = New(0)
 	}
 
 	out := C._str(&n.val[0], C.ulong(dp))
@@ -119,7 +119,7 @@ func (n Numeric) Float64() float64 {
 // region Private
 func (n Numeric) getInt() int64 {
 	if !n.init {
-		panic("numeric: Numeric is not initialized")
+		n = New(0)
 	}
 
 	return int64(C.mpfr_get_si(&n.val[0], C.MPFR_RNDN))
@@ -127,7 +127,7 @@ func (n Numeric) getInt() int64 {
 
 func (n Numeric) getUInt() uint64 {
 	if !n.init {
-		panic("numeric: Numeric is not initialized")
+		n = New(0)
 	}
 
 	return uint64(C.mpfr_get_ui(&n.val[0], C.MPFR_RNDN))
@@ -135,7 +135,7 @@ func (n Numeric) getUInt() uint64 {
 
 func (n Numeric) getFloat() float64 {
 	if !n.init {
-		panic("numeric: Numeric is not initialized")
+		n = New(0)
 	}
 
 	return float64(C.mpfr_get_d(&n.val[0], C.MPFR_RNDN))
